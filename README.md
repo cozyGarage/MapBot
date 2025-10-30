@@ -2,6 +2,26 @@
 
 #### Hey! I'm your friendly navigator bot! Try me out, not to brag but I'm FUN!
 
+> **🎉 Updated for 2025!** This project has been modernized with the latest Python packages and now uses spaCy for NLP processing (no more Java dependency!). Python 3.10+ is required.
+
+## What's New in 2025?
+
+This MapBot has been completely modernized to use current technology:
+
+- **Modern Python Support**: Now requires Python 3.10+ (tested with 3.12)
+- **Updated Dependencies**: All packages updated to 2025 versions
+  - googlemaps 4.10.0 (from 2.5.1)
+  - nltk 3.9.1 (from 3.4.5)
+  - pandas 2.2.3 (from 0.25.1)
+  - numpy 2.1.3 (from 1.16.5)
+  - scikit-learn 1.5.2 (from 0.21.3)
+  - mysql-connector-python 9.1.0 (from 8.0.18)
+- **No More Java!**: Replaced Stanford CoreNLP with spaCy for dependency parsing
+  - Faster setup - no need to download Java or Stanford CoreNLP jars
+  - Better performance with modern NLP models
+  - Automatic model downloads
+- **Simplified Setup**: Streamlined installation process with virtual environments
+
 
 
 ##### What I do?
@@ -31,39 +51,86 @@ Check out all related information [here](GSSoC.md)
 
 ##### What are some pre-requisites?
 
+-  Python 3.10 or higher
+  - Verify installation with `python --version` or `python3 --version`
 -  MySQL 
-  - Install the community version of mySQL from the [official mySQL documentation page](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/). 
+  - Install the community version of MySQL from the [official MySQL documentation page](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/). 
   - Create root user credentials during installation.
-  - Verify the installation, running the command  `mysql -uroot -p -hlocalhost` should open the mySQL monitor. (Enter the root password when prompted)
-- StanfordCoreNLP
-  - StanfordCoreNLP has a dependency on Java 8. `java -version` should complete successfully with version 1.8 or higher. 
-  - Windows- Download as a .zip file from [here](https://stanfordnlp.github.io/CoreNLP/download.html).  
-  - Linux and MacOS- Follow the instructions to download the file from [here](https://stanfordnlp.github.io/CoreNLP/download.html).  
+  - Verify the installation, running the command  `mysql -uroot -p -hlocalhost` should open the MySQL monitor. (Enter the root password when prompted)  
 
 ##### How to set me up?
-- Clone the repository
-- Create the **mapbot** database in mySQL
-  -  `mysql -uroot -p -hlocalhost` 
-  - Enter root password when prompted
-  - `create database mapbot;`
-  - Verify creation of the database `show databases;`
-- Unzip the StanfordCoreNLP package in the repository and keep the file names `stanford-corenlp-x.x.x.jar` and `stanford-corenlp-x.x.x-models.jar` handy.
-- Add config.py file to .gitignore to avoid pushing changes made to config
-- Run `git rm --cached config.py`
-- Edit the config.py file with the corresponding values
+
+**Step 1: Clone the repository**
+```bash
+git clone https://github.com/cozyGarage/MapBot.git
+cd MapBot
+```
+
+**Step 2: Set up virtual environment (recommended)**
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On Linux/Mac:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
+```
+
+**Step 3: Install dependencies**
+```bash
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+```
+
+**Step 4: Check your setup (optional but recommended)**
+```bash
+python check_requirements.py
+```
+
+**Step 5: Set up MySQL database**
+```bash
+mysql -uroot -p -hlocalhost
+```
+Then in MySQL:
+```sql
+CREATE DATABASE mapbot;
+SHOW DATABASES;  -- verify creation
+EXIT;
+```
+
+**Step 6: Configure the application**
+- Add config.py to .gitignore: `echo "config.py" >> .gitignore`
+- Remove config.py from git tracking: `git rm --cached config.py`
+- Edit the `config.py` file with your values:
   - user = "root"
-  - password = <your_root_password>
+  - password = \<your_root_password\>
   - host = "localhost"
   - database = "mapbot"
-  - key = <your_Google_Cloud_API_key>
-  - stanford_path_to_jar = <your_path_to_stanford-corenlp-x.x.x.jar>
-  - stanford_path_to_models_jar = <your_path_to_stanford-corenlp-x.x.x-models.jar>
-  - javahome = <your_path_to_jdk_bin_java.exe>
-- Install dependencies from `requirements.txt` file. Run `pip install -r requirements.txt`
-- You're all set up, run the `init.py` file. `python init.py` 
-- It is recommended that you set this project up in a virtual environment to keep the dependencies separated and for easier debugging. Here's how you can do that - 
-    1. [Python](https://realpython.com/python-virtual-environments-a-primer/#why-the-need-for-virtual-environments)
-    2. [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
+  - key = \<your_Google_Cloud_API_key\>
+
+**Step 7: Run MapBot!**
+```bash
+python init.py
+```
+
+The first run will download NLTK data automatically. After that, you're ready to chat!
+
+------
+##### Testing
+
+You can run basic tests to verify the installation:
+```bash
+python test_basic.py
+```
+
+This will test:
+- Module imports
+- NLTK setup
+- Sentence parsing with spaCy
+- Feature extraction
+- Classification model
 
 ------
 ##### How do I work?
