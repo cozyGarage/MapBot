@@ -2,6 +2,8 @@
 
 #### Hey! I'm your friendly navigator bot! Try me out, not to brag but I'm FUN!
 
+> **🎉 Updated for 2025!** This project has been modernized with the latest Python packages and now uses spaCy for NLP processing (no more Java dependency!). Python 3.10+ is required.
+
 
 
 ##### What I do?
@@ -31,39 +33,45 @@ Check out all related information [here](GSSoC.md)
 
 ##### What are some pre-requisites?
 
+-  Python 3.10 or higher
+  - Verify installation with `python --version` or `python3 --version`
 -  MySQL 
-  - Install the community version of mySQL from the [official mySQL documentation page](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/). 
+  - Install the community version of MySQL from the [official MySQL documentation page](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/). 
   - Create root user credentials during installation.
-  - Verify the installation, running the command  `mysql -uroot -p -hlocalhost` should open the mySQL monitor. (Enter the root password when prompted)
-- StanfordCoreNLP
-  - StanfordCoreNLP has a dependency on Java 8. `java -version` should complete successfully with version 1.8 or higher. 
-  - Windows- Download as a .zip file from [here](https://stanfordnlp.github.io/CoreNLP/download.html).  
-  - Linux and MacOS- Follow the instructions to download the file from [here](https://stanfordnlp.github.io/CoreNLP/download.html).  
+  - Verify the installation, running the command  `mysql -uroot -p -hlocalhost` should open the MySQL monitor. (Enter the root password when prompted)  
 
 ##### How to set me up?
 - Clone the repository
-- Create the **mapbot** database in mySQL
+- Create the **mapbot** database in MySQL
   -  `mysql -uroot -p -hlocalhost` 
   - Enter root password when prompted
   - `create database mapbot;`
   - Verify creation of the database `show databases;`
-- Unzip the StanfordCoreNLP package in the repository and keep the file names `stanford-corenlp-x.x.x.jar` and `stanford-corenlp-x.x.x-models.jar` handy.
+- It is recommended to set this project up in a virtual environment:
+  ```bash
+  # Create virtual environment
+  python -m venv venv
+  
+  # Activate virtual environment
+  # On Linux/Mac:
+  source venv/bin/activate
+  # On Windows:
+  venv\Scripts\activate
+  ```
+- Install dependencies from `requirements.txt` file:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- The spaCy English language model will be automatically downloaded on first run
 - Add config.py file to .gitignore to avoid pushing changes made to config
 - Run `git rm --cached config.py`
-- Edit the config.py file with the corresponding values
+- Edit the config.py file with the corresponding values:
   - user = "root"
   - password = <your_root_password>
   - host = "localhost"
   - database = "mapbot"
   - key = <your_Google_Cloud_API_key>
-  - stanford_path_to_jar = <your_path_to_stanford-corenlp-x.x.x.jar>
-  - stanford_path_to_models_jar = <your_path_to_stanford-corenlp-x.x.x-models.jar>
-  - javahome = <your_path_to_jdk_bin_java.exe>
-- Install dependencies from `requirements.txt` file. Run `pip install -r requirements.txt`
-- You're all set up, run the `init.py` file. `python init.py` 
-- It is recommended that you set this project up in a virtual environment to keep the dependencies separated and for easier debugging. Here's how you can do that - 
-    1. [Python](https://realpython.com/python-virtual-environments-a-primer/#why-the-need-for-virtual-environments)
-    2. [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
+- You're all set up, run the `init.py` file: `python init.py`
 
 ------
 ##### How do I work?

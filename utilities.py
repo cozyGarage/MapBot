@@ -1,20 +1,51 @@
 def setup_nltk():
     import nltk
     nltk.download('punkt')
+    nltk.download('punkt_tab')
     nltk.download('averaged_perceptron_tagger')
+    nltk.download('averaged_perceptron_tagger_eng')
     nltk.download('stopwords')
+    nltk.download('wordnet')
 #grammar parsing
-def parse_sentence(user_input):                               #returns root word, triples of StanfordDependencyParser
-    import os
-    from nltk.parse.stanford import StanfordDependencyParser
-    import config
-    path_to_jar = config.stanford_path_to_jar
-    path_to_models_jar = config.stanford_path_to_models_jar
-    dependency_parser = StanfordDependencyParser(path_to_jar=path_to_jar, path_to_models_jar=path_to_models_jar)
-    os.environ['JAVAHOME'] = config.javahome
-    result = dependency_parser.raw_parse(user_input)
-    dep = next(result)                                                          # get next item from the iterator result
-    return dep.triples(),dep.root["word"]
+def parse_sentence(user_input):                               #returns root word, triples using spaCy
+    import spacy
+    try:
+        nlp = spacy.load('en_core_web_sm')
+    except OSError:
+        print("Downloading language model for spaCy (don't worry, this will only happen once)")
+        from spacy.cli import download
+        download('en_core_web_sm')
+        nlp = spacy.load('en_core_web_sm')
+    
+    doc = nlp(user_input)
+    
+    # Extract dependency triples in a format similar to Stanford parser
+    triples = []
+    root_word = None
+    
+    for token in doc:
+        if token.dep_ == 'ROOT':
+            root_word = token.text
+        
+        # Create triples: ((word, POS_tag), dependency_relation, (child_word, child_POS_tag))
+        if token.head != token:
+            triple = (
+                (token.head.text, token.head.tag_),
+                token.dep_,
+                (token.text, token.tag_)
+            )
+            triples.append(triple)
+    
+    # If no root found, use the first verb or the first token
+    if root_word is None:
+        for token in doc:
+            if token.pos_ == 'VERB':
+                root_word = token.text
+                break
+        if root_word is None and len(doc) > 0:
+            root_word = doc[0].text
+    
+    return triples, root_word
 
 #classification into statements questions and chat
 def classify_model():
